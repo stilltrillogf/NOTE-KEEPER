@@ -15,19 +15,20 @@ Making it myself will allow me to customize it and add features that popular not
 - Theming (light/dark)
 - Theming (custom)
 - User Authentication
+- Signing in with Google
 - Reminders (notifications)
 - Trash can
 - Labels
 - Multimedia (images, photos/videos)
-- Soundbites (recording soundbites in the note, dragging them
+- Soundbites (recording soundbites in the note, dragging them)
 - Drawings
-- Custom note backgrounds
+- Custom note backgrounds (colors, pictures)
 - Undo-redo
-- Note templates
-- Pin-unpin
-- Grid/list view (or different layouts)
-- Dragging notes
-- Searching notes (different filtering options)
+- Note templates (and custom templates)
+- Pin-unpin notes
+- Grid/list view (and/or custom layouts)
+- Dragging notes to change their position
+- Searching notes (multiple filtering options)
 - Sending feedback
 - Keyboard shortcuts
 - Settings
