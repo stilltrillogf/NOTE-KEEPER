@@ -40,6 +40,7 @@ export const CreateNote = ({ createNote }) => {
       </div>
       <button
         onClick={() => {
+          if (note.text === "" && note.title === "") return;
           console.log(note);
           createNote(note);
           setNote(initialNote);
