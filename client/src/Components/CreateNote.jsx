@@ -8,6 +8,12 @@ const initialNote = {
 export const CreateNote = ({ createNote }) => {
   const [note, setNote] = useState(initialNote);
 
+  const handleCreateNote = () => {
+    if (note.text === "" && note.title === "") return;
+    createNote(note);
+    setNote(initialNote);
+  };
+
   return (
     <div
       style={{
@@ -38,16 +44,7 @@ export const CreateNote = ({ createNote }) => {
           }}
         />
       </div>
-      <button
-        onClick={() => {
-          if (note.text === "" && note.title === "") return;
-          console.log(note);
-          createNote(note);
-          setNote(initialNote);
-        }}
-      >
-        +
-      </button>
+      <button onClick={handleCreateNote}>+</button>
     </div>
   );
 };
