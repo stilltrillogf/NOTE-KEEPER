@@ -5,9 +5,9 @@ export const Notes = ({ notes }) => {
     <>
       {notes.map((note) => {
         return (
-          <div key={note._id}>
-            <div>{note.title}</div>
-            <div>{note.text}</div>
+          <div style={{ border: "1px solid black" }} key={note._id}>
+            <div>Title: {note.title}</div>
+            <div>Text: {note.text}</div>
           </div>
         );
       })}
