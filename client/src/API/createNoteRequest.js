@@ -6,9 +6,9 @@ export const createNoteRequest = (note) => {
     headers: {
       "Content-Type": "application/json",
     },
-    body: {
+    body: JSON.stringify({
       title: note.title,
       text: note.text,
-    },
+    }),
   }).then((res) => res.json());
 };
