@@ -28,12 +28,13 @@ Making it myself will allow me to customize it and add features that popular not
 - Pin-unpin notes
 - Grid/list view (and/or custom layouts)
 - Dragging notes to change their position
+- Note collections/groupings
 - Searching notes (multiple filtering options)
 - Sending feedback
 - Keyboard shortcuts
 - Settings
 - Sharing notes
-- Collaborators? (Adding other registered users to the note, setting custom permissions for them)
+- Collaborators? (Adding other registered users to the note/collection, setting custom permissions for them)
 
 ---
 ## Tech stack
