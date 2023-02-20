@@ -1,0 +1,26 @@
+.createNoteWrapper {
+  width: 600px;
+}
+
+/* Styles for isTakingANote === false */
+.createNoteNotActive {
+  border: 1px solid black;
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+}
+
+.createNoteActivator {
+  cursor: text;
+}
+/* Styles for isTakingANote === true */
+
+.createNoteActive {
+  display: flex;
+  flex-direction: column;
+}
+
+.createNoteInputs {
+  display: flex;
+  flex-direction: column;
+}

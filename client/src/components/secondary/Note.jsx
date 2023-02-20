@@ -1,7 +1,8 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import React, { useState } from "react";
-import { deleteNoteRequest } from "../API/deleteNoteRequest";
-import { updateNoteRequest } from "../API/updateNoteRequest";
+import { deleteNoteRequest } from "../../API/deleteNoteRequest";
+import { updateNoteRequest } from "../../API/updateNoteRequest";
+import styles from "../../styles/Note.module.css";
 
 export const Note = ({ note }) => {
   const [isEditing, setIsEditing] = useState(false);
@@ -53,6 +54,7 @@ export const Note = ({ note }) => {
         position: "relative",
         display: "flex",
         flexDirection: "column",
+        width: "100%",
       }}
       key={note._id}
     >
