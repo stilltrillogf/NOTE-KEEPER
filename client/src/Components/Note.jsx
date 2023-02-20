@@ -32,6 +32,20 @@ export const Note = ({ note }) => {
     }
   );
 
+  const handleDeleteNote = () => {
+    deleteNote(note);
+  };
+
+  const handleEditNote = () => {
+    if (isEditing) {
+      updateNote(updatedNote);
+      setUpdatedNote(note);
+      setIsEditing(false);
+    } else {
+      setIsEditing(true);
+    }
+  };
+
   return (
     <div
       style={{
@@ -67,15 +81,7 @@ export const Note = ({ note }) => {
         </>
       )}
       <div
-        onClick={() => {
-          if (isEditing) {
-            updateNote(updatedNote);
-            setUpdatedNote(note);
-            setIsEditing(false);
-          } else {
-            setIsEditing(true);
-          }
-        }}
+        onClick={handleEditNote}
         style={{
           position: "absolute",
           right: "0",
@@ -87,9 +93,7 @@ export const Note = ({ note }) => {
       </div>
       {isEditing ? null : (
         <div
-          onClick={() => {
-            deleteNote(note);
-          }}
+          onClick={handleDeleteNote}
           style={{
             position: "absolute",
             right: "0",

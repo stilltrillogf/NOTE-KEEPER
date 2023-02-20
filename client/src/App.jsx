@@ -4,7 +4,6 @@ import "./App.css";
 import { CreateNote } from "./Components/CreateNote";
 import { Notes } from "./Components/Notes";
 import { readNotesRequest } from "./API/readNotesRequest";
-import { useState } from "react";
 import { createNoteRequest } from "./API/createNoteRequest";
 
 function App() {
