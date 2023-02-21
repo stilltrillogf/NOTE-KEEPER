@@ -1,26 +1,56 @@
-.createNoteWrapper {
+@import "./variables.css";
+
+.wrapper {
+  border: 1px solid black;
+  border-radius: 10px;
   width: 600px;
+  padding: 10px;
+  cursor: text;
 }
 
-/* Styles for isTakingANote === false */
-.createNoteNotActive {
+.wrapperActive {
   border: 1px solid black;
-  display: flex;
-  justify-content: space-between;
+  border-radius: 10px;
+  width: 600px;
   padding: 10px;
 }
 
-.createNoteActivator {
-  cursor: text;
+/* Styles for isTakingANote === false */
+.notActive {
+  display: flex;
+  justify-content: space-between;
 }
+
 /* Styles for isTakingANote === true */
-
-.createNoteActive {
+.active {
   display: flex;
   flex-direction: column;
 }
 
-.createNoteInputs {
+.activeInputs {
   display: flex;
   flex-direction: column;
+  gap: 15px;
+}
+
+.activeInputs input {
+  outline: none;
+  border: none;
+  font-size: 20px;
+}
+
+.activeInputs textarea {
+  resize: none;
+  outline: none;
+  border: none;
+  font-size: 15px;
+}
+
+.activeFooter {
+  display: flex;
+  justify-content: space-between;
+}
+
+.activeCloseBtn {
+  cursor: pointer;
 }
