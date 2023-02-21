@@ -43,22 +43,20 @@ export const CreateNote = ({ onCreateNote }) => {
         <div className={styles.active}>
           <div className={styles.activeInputs}>
             {/* TODO: Make custom textboxes (contenteditable) */}
-            <input
-              placeholder="Title"
-              type="text"
-              value={note.title}
-              onChange={(e) => {
-                setNote({ ...note, title: e.target.value });
+            <div
+              className={styles.customTitleTextbox}
+              contentEditable={true}
+              onInput={(e) => {
+                setNote({ ...note, title: e.target.textContent });
               }}
-            />
-            <textarea
-              placeholder="Take a note..."
-              value={note.text}
-              autoFocus
-              onChange={(e) => {
-                setNote({ ...note, text: e.target.value });
+            ></div>
+            <div
+              className={styles.customTextTextbox}
+              contentEditable={true}
+              onInput={(e) => {
+                setNote({ ...note, text: e.target.textContent });
               }}
-            />
+            ></div>
           </div>
           <div className={styles.activeFooter}>
             <div>OPTIONS {"(todo)"}</div>
