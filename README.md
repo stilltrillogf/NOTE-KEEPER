@@ -3,8 +3,8 @@
 ## Description
 
 I want to make a note keeping app to learn new concepts, reinforce my knowledge and slowly build out my software developement portfolio.
-Also, I need this sort of app for personal usage.
-Making it myself will allow me to customize it and add features that popular note keeping apps lack.
+**This app design and core logic is inspired by google keep, but i'm not intending for it to be a clone, rather improved/expanded version.
+I'm planning to add features that I feel like google keep lacks.**
 
 ---
 
