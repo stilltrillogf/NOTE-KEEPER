@@ -1,0 +1,16 @@
+.note {
+  border: 1px solid black;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  cursor: pointer;
+  word-wrap: break-word;
+}
+
+.noteTitle {
+  font-size: 20px;
+}
+
+.noteText {
+}

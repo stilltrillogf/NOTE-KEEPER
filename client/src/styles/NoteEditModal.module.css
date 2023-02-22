@@ -1,0 +1,38 @@
+.modal {
+  background-color: white;
+  border: 1px solid black;
+  padding: 10px;
+  border-radius: 10px;
+  position: absolute;
+  top: 15%;
+  left: 50%;
+  transform: translate(-50%);
+  width: 600px;
+}
+
+.customTitleTextbox {
+  font-size: 20px;
+  outline: none;
+  cursor: text;
+}
+.customTitleTextbox[contenteditable]:empty::before {
+  content: "Title";
+}
+
+.customTextTextbox {
+  outline: none;
+  cursor: text;
+}
+.customTextTextbox[contenteditable]:empty::before {
+  content: "Take a note...";
+}
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.closeBtn {
+  cursor: pointer;
+}
