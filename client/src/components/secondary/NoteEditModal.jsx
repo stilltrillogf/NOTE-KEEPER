@@ -1,5 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import React, { useEffect, useRef, useState } from "react";
+import { BsTrash } from "react-icons/bs";
 
 import { deleteNoteRequest } from "../../API/deleteNoteRequest";
 import { updateNoteRequest } from "../../API/updateNoteRequest";
@@ -87,7 +88,9 @@ export const NoteEditModal = ({ note, isEditingState }) => {
         {note.text}
       </div>
       <div className={styles.footer}>
-        <div>OPTIONS {"(todo)"}</div>
+        <div className={styles.options}>
+          <BsTrash className={styles.option} onClick={handleDeleteNote} />
+        </div>
         <div onClick={handleFinishEditing} className={styles.closeBtn}>
           Close
         </div>
