@@ -2,7 +2,7 @@
 name: Bug
 about: Remove a bug
 title: ''
-labels: bug, enhancement
+labels: bug
 assignees: stilltrillogf
 
 ---
