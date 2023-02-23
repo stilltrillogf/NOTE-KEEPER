@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import { BsPin } from "react-icons/bs";
 
 import styles from "../../styles/Note.module.css";
 import { NoteEditModal } from "./NoteEditModal";
@@ -12,7 +13,7 @@ export const Note = ({ note }) => {
       // console.log("hovering the note");
     }
   };
-  // on hover change state overlay
+  // on hover change state of overlay
   useEffect(() => {
     window.addEventListener("mouseover", handleHoverNote);
 
@@ -31,13 +32,9 @@ export const Note = ({ note }) => {
         key={note._id}
         ref={noteRef}
       >
-        <div>
-          <div className={styles.overlaySelect}>O</div>
-          <div className={styles.noteTitle}>{note.title}</div>
-          <div className={styles.overlayPin}>PIN</div>
-        </div>
+        <div className={styles.noteTitle}>{note.title}</div>
+
         <div className={styles.noteText}>{note.text}</div>
-        <div className={styles.overlayOptions}>OPTIONS</div>
       </div>
       {isEditing && (
         <NoteEditModal isEditingState={[isEditing, setIsEditing]} note={note} />
