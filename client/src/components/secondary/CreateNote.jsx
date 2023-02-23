@@ -1,15 +1,32 @@
 import React, { useEffect, useRef, useState } from "react";
-import styles from "../../styles/CreateNote.module.css";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-export const CreateNote = ({ onCreateNote }) => {
+import styles from "../../styles/CreateNote.module.css";
+import { createNoteRequest } from "../../API/createNoteRequest";
+
+export const CreateNote = () => {
   const [note, setNote] = useState(initialNote);
   const [isTakingANote, setIsTakingANote] = useState(false);
   const wrapperRef = useRef(null);
 
+  const queryClient = useQueryClient();
+
+  const { mutate: createNote } = useMutation(
+    (note) => {
+      return createNoteRequest(note);
+    },
+    {
+      onSettled: (_, err) => {
+        err && console.log(err);
+        queryClient.invalidateQueries("notes");
+      },
+    }
+  );
+
   const handleFinishTakingANote = () => {
     if (note.text === "" && note.title === "") setIsTakingANote(false);
     else {
-      onCreateNote(note);
+      createNote(note);
       setNote(initialNote);
       setIsTakingANote(false);
     }
@@ -42,7 +59,6 @@ export const CreateNote = ({ onCreateNote }) => {
       {isTakingANote ? (
         <div className={styles.active}>
           <div className={styles.activeInputs}>
-            {/* TODO: Make custom textboxes (contenteditable) */}
             <div
               className={styles.customTitleTextbox}
               contentEditable={true}
@@ -53,6 +69,7 @@ export const CreateNote = ({ onCreateNote }) => {
             <div
               className={styles.customTextTextbox}
               contentEditable={true}
+              autoFocus
               onInput={(e) => {
                 setNote({ ...note, text: e.target.textContent });
               }}
