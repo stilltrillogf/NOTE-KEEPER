@@ -10,6 +10,7 @@ export const NoteEditModal = ({ note, isEditingState }) => {
   const [isEditing, setIsEditing] = isEditingState;
   const [updatedNote, setUpdatedNote] = useState(note);
   const modalRef = useRef(null);
+  const textInputRef = useRef(null);
 
   const queryClient = useQueryClient();
 
@@ -59,6 +60,7 @@ export const NoteEditModal = ({ note, isEditingState }) => {
 
   useEffect(() => {
     window.addEventListener("mousedown", handleClickOutside);
+    focusTheEndOfText(textInputRef.current);
 
     return () => {
       window.removeEventListener("mousedown", handleClickOutside);
@@ -81,6 +83,7 @@ export const NoteEditModal = ({ note, isEditingState }) => {
         className={styles.customTextTextbox}
         suppressContentEditableWarning="true"
         contentEditable={true}
+        ref={textInputRef}
         onInput={(e) => {
           setUpdatedNote({ ...note, text: e.target.textContent });
         }}
@@ -97,4 +100,10 @@ export const NoteEditModal = ({ note, isEditingState }) => {
       </div>
     </div>
   );
+};
+
+const focusTheEndOfText = (el) => {
+  el.focus();
+  window.getSelection().selectAllChildren(el);
+  window.getSelection().collapseToEnd();
 };
