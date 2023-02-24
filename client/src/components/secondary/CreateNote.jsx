@@ -57,34 +57,11 @@ export const CreateNote = () => {
       }}
     >
       {isTakingANote ? (
-        <div className={styles.active}>
-          <div className={styles.activeInputs}>
-            <div
-              className={styles.customTitleTextbox}
-              contentEditable={true}
-              onInput={(e) => {
-                setNote({ ...note, title: e.target.textContent });
-              }}
-            ></div>
-            <div
-              className={styles.customTextTextbox}
-              contentEditable={true}
-              autoFocus
-              onInput={(e) => {
-                setNote({ ...note, text: e.target.textContent });
-              }}
-            ></div>
-          </div>
-          <div className={styles.activeFooter}>
-            <div>OPTIONS {"(todo)"}</div>
-            <div
-              onClick={handleFinishTakingANote}
-              className={styles.activeCloseBtn}
-            >
-              Close
-            </div>
-          </div>
-        </div>
+        <CreateNoteActive
+          note={note}
+          setNote={setNote}
+          handleFinishTakingANote={handleFinishTakingANote}
+        />
       ) : (
         <div className={styles.notActive}>
           <div>Take a note...</div>
@@ -98,4 +75,44 @@ export const CreateNote = () => {
 const initialNote = {
   title: "",
   text: "",
+};
+
+const CreateNoteActive = ({ note, setNote, handleFinishTakingANote }) => {
+  const textInputRef = useRef(null);
+
+  useEffect(() => {
+    textInputRef.current.focus();
+  }, []);
+
+  return (
+    <div className={styles.active}>
+      <div className={styles.activeInputs}>
+        <div
+          className={styles.customTitleTextbox}
+          contentEditable={true}
+          onInput={(e) => {
+            setNote({ ...note, title: e.target.textContent });
+          }}
+        ></div>
+        <div
+          className={styles.customTextTextbox}
+          contentEditable={true}
+          autoFocus
+          onInput={(e) => {
+            setNote({ ...note, text: e.target.textContent });
+          }}
+          ref={textInputRef}
+        ></div>
+      </div>
+      <div className={styles.activeFooter}>
+        <div>OPTIONS {"(todo)"}</div>
+        <div
+          onClick={handleFinishTakingANote}
+          className={styles.activeCloseBtn}
+        >
+          Close
+        </div>
+      </div>
+    </div>
+  );
 };
