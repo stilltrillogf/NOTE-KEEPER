@@ -59,8 +59,11 @@ export const NoteEditModal = ({ note, isEditingState }) => {
   };
 
   useEffect(() => {
-    window.addEventListener("mousedown", handleClickOutside);
     focusTheEndOfText(textInputRef.current);
+  }, []);
+
+  useEffect(() => {
+    window.addEventListener("mousedown", handleClickOutside);
 
     return () => {
       window.removeEventListener("mousedown", handleClickOutside);
