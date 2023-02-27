@@ -35,6 +35,8 @@ I'm planning to add features that I feel like google keep lacks.**
 - Settings
 - Sharing notes
 - Collaborators? (Adding other registered users to the note/collection, setting custom permissions for them)
+- Choosing language of the app or single notes/collections
+- Autocorrection of text (based on chosen language)
 
 ---
 ## Tech stack
