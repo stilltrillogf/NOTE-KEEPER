@@ -77,7 +77,9 @@ export const NoteEditModal = ({ note, isEditingState }) => {
         suppressContentEditableWarning="true"
         contentEditable={true}
         onInput={(e) => {
-          setUpdatedNote({ ...note, title: e.target.textContent });
+          console.log(updatedNote);
+
+          setUpdatedNote({ ...updatedNote, title: e.target.textContent });
         }}
       >
         {note.title}
@@ -88,7 +90,8 @@ export const NoteEditModal = ({ note, isEditingState }) => {
         contentEditable={true}
         ref={textInputRef}
         onInput={(e) => {
-          setUpdatedNote({ ...note, text: e.target.textContent });
+          console.log(updatedNote);
+          setUpdatedNote({ ...updatedNote, text: e.target.textContent });
         }}
       >
         {note.text}
