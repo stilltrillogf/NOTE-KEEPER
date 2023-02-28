@@ -13,7 +13,7 @@ export const Note = ({ note }) => {
       // console.log("hovering the note");
     }
   };
-  // on hover change state of overlay
+
   useEffect(() => {
     window.addEventListener("mouseover", handleHoverNote);
 

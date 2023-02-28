@@ -1,10 +1,20 @@
-.modal {
+.modalOverlay {
   z-index: 1;
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  backdrop-filter: blur(1px);
+}
+
+.modal {
+  z-index: 2;
   background-color: white;
   border: 1px solid black;
   padding: 10px;
   border-radius: 10px;
-  position: absolute;
+  position: fixed;
   top: 15%;
   left: 50%;
   transform: translate(-50%);
