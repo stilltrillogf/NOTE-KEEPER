@@ -71,40 +71,40 @@ export const NoteEditModal = ({ note, isEditingState }) => {
   }, [handleClickOutside]);
 
   return (
-    <div ref={modalRef} className={styles.modal}>
-      <div
-        className={styles.customTitleTextbox}
-        suppressContentEditableWarning="true"
-        contentEditable={true}
-        onInput={(e) => {
-          console.log(updatedNote);
-
-          setUpdatedNote({ ...updatedNote, title: e.target.textContent });
-        }}
-      >
-        {note.title}
-      </div>
-      <div
-        className={styles.customTextTextbox}
-        suppressContentEditableWarning="true"
-        contentEditable={true}
-        ref={textInputRef}
-        onInput={(e) => {
-          console.log(updatedNote);
-          setUpdatedNote({ ...updatedNote, text: e.target.textContent });
-        }}
-      >
-        {note.text}
-      </div>
-      <div className={styles.footer}>
-        <div className={styles.options}>
-          <BsTrash className={styles.option} onClick={handleDeleteNote} />
+    <>
+      <div className={styles.modalOverlay}></div>
+      <div ref={modalRef} className={styles.modal}>
+        <div
+          className={styles.customTitleTextbox}
+          suppressContentEditableWarning="true"
+          contentEditable={true}
+          onInput={(e) => {
+            setUpdatedNote({ ...updatedNote, title: e.target.textContent });
+          }}
+        >
+          {note.title}
         </div>
-        <div onClick={handleFinishEditing} className={styles.closeBtn}>
-          Close
+        <div
+          className={styles.customTextTextbox}
+          suppressContentEditableWarning="true"
+          contentEditable={true}
+          ref={textInputRef}
+          onInput={(e) => {
+            setUpdatedNote({ ...updatedNote, text: e.target.textContent });
+          }}
+        >
+          {note.text}
+        </div>
+        <div className={styles.footer}>
+          <div className={styles.options}>
+            <BsTrash className={styles.option} onClick={handleDeleteNote} />
+          </div>
+          <div onClick={handleFinishEditing} className={styles.closeBtn}>
+            Close
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

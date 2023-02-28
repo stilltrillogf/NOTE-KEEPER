@@ -12,17 +12,3 @@
 .noteTitle {
   font-size: 20px;
 }
-
-.overlaySelect {
-  font-size: 20px;
-  position: absolute;
-  top: 0;
-  left: 0;
-  transform: translate(-33%, -33%);
-}
-
-/* .overlayPin {
-  position: absolute;
-  top: 10%;
-  right: 5%;
-} */
