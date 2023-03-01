@@ -1,0 +1,50 @@
+.note {
+  border: 1px solid black;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 10px;
+  cursor: default;
+  word-wrap: break-word;
+  position: relative;
+}
+
+.noteTitle {
+  font-size: 20px;
+}
+
+/* OVERLAY */
+
+.overlaySelect {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: translate(-50%, -50%);
+}
+
+.overlayPin {
+  position: absolute;
+  top: 0;
+  right: 0;
+  transform: translate(45%, -45%);
+}
+
+.overlayPin:hover,
+.overlaySelect:hover {
+  cursor: pointer;
+}
+
+.optionsFooter {
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.optionsFooterOption {
+  cursor: pointer;
+}
+
+.hidden {
+  opacity: 0;
+}

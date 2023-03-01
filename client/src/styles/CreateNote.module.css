@@ -1,0 +1,61 @@
+@import "./variables.css";
+
+.wrapper {
+  border: 1px solid black;
+  border-radius: 10px;
+  width: 600px;
+  padding: 10px;
+  cursor: text;
+}
+
+.wrapperActive {
+  border: 1px solid black;
+  border-radius: 10px;
+  width: 600px;
+  padding: 10px;
+}
+
+/* Styles for isTakingANote === false */
+.notActive {
+  display: flex;
+  justify-content: space-between;
+}
+
+/* Styles for isTakingANote === true */
+.active {
+  display: flex;
+  flex-direction: column;
+}
+
+.activeInputs {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.customTitleTextbox {
+  font-size: 20px;
+  outline: none;
+  cursor: text;
+}
+.customTitleTextbox[contenteditable]:empty::before {
+  content: "Title";
+}
+
+.customTextTextbox {
+  outline: none;
+  cursor: text;
+}
+.customTextTextbox[contenteditable]:empty::before {
+  content: "Take a note...";
+}
+
+.activeFooter {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.activeCloseBtn {
+  cursor: pointer;
+}

@@ -1,0 +1,8 @@
+.notesGrid {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(3, 200px);
+  grid-template-rows: auto;
+  gap: 25px;
+  justify-content: center;
+}
