@@ -5,7 +5,7 @@
   flex-direction: column;
   justify-content: space-between;
   padding: 10px;
-  cursor: pointer;
+  cursor: default;
   word-wrap: break-word;
   position: relative;
 }
@@ -14,16 +14,27 @@
   font-size: 20px;
 }
 
+.optionsFooter {
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.optionsFooterOption {
+  cursor: pointer;
+}
+
+.hidden {
+  opacity: 0;
+}
+
+/* OVERLAY */
+
 .overlaySelect {
   position: absolute;
   top: 0;
   left: 0;
   transform: translate(-50%, -50%);
-  cursor: default;
-}
-
-.overlaySelect:hover {
-  color: red;
 }
 
 .overlayPin {
@@ -31,16 +42,10 @@
   top: 0;
   right: 0;
   transform: translate(45%, -45%);
-  cursor: default;
 }
 
-.overlayPin:hover {
+.overlayPin:hover,
+.overlaySelect:hover {
   color: red;
-}
-
-.overlayFooter {
-}
-
-.hidden {
-  opacity: 0;
+  cursor: pointer;
 }

@@ -1,13 +1,14 @@
 import React, { useEffect, useRef, useState } from "react";
 import { BsPin } from "react-icons/bs";
 import { IoCheckmarkCircleOutline } from "react-icons/io5";
+import { BsTrash, BsThreeDotsVertical } from "react-icons/bs";
 
 import styles from "../../styles/Note.module.css";
 import { NoteEditModal } from "./NoteEditModal";
 
 export const Note = ({ note }) => {
   const [isEditing, setIsEditing] = useState(false);
-  const [noteIsHovered, setNoteIsHovered] = useState(true);
+  const [noteIsHovered, setNoteIsHovered] = useState(false);
   const noteRef = useRef(null);
 
   const handleClickNote = () => {
@@ -17,12 +18,9 @@ export const Note = ({ note }) => {
 
   const handleHoverNote = (e) => {
     if (noteRef && noteRef.current.contains(e.target)) {
-      console.log("hovering the note");
-
-      // TODO: Make it so it doesn't re-fire when hovered over item that is INSIDE the note
-      // Intended behavior :
-      // -> once the cursor has entered the note, noteIsHovered state changes to true (overlay becomes visible)
-      // -> once the cursor has left the note, noteIsHovered state changes to false (overlay disappears)
+      setNoteIsHovered(true);
+    } else {
+      setNoteIsHovered(false);
     }
   };
 
@@ -46,11 +44,14 @@ export const Note = ({ note }) => {
         <div className={styles.noteText}>{note.text}</div>
         {noteIsHovered && <NoteOverlay />}
         <div
-          className={`${styles.overlayFooter} ${
+          className={`${styles.optionsFooter} ${
             noteIsHovered ? "" : styles.hidden
           }`}
         >
-          FOOTER
+          <div className={styles.optionsFooterOptions}>
+            <BsTrash className={styles.optionsFooterOption} />
+          </div>
+          <BsThreeDotsVertical className={styles.optionsFooterOption} />
         </div>
       </div>
       {isEditing && (
