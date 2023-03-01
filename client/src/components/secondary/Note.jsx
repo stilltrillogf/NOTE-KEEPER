@@ -8,17 +8,12 @@ import { NoteEditModal } from "./NoteEditModal";
 
 export const Note = ({ note }) => {
   const [isEditing, setIsEditing] = useState(false);
-  const [noteIsHovered, setNoteIsHovered] = useState(false);
+  const [overlayIsVisible, setoverlayIsVisible] = useState(false);
   const noteRef = useRef(null);
   const overlayRef = useRef(null);
-  const optionsFooterRef = useRef(null);
 
   const handleClickNote = (e) => {
-    // TODO: If part of the overlay is clicked - return
-    if (
-      (overlayRef && overlayRef.current.contains(e.target)) ||
-      (optionsFooterRef && optionsFooterRef.current.contains(e.target))
-    ) {
+    if (overlayRef && overlayRef.current.contains(e.target)) {
       console.log("overlay");
       return;
     }
@@ -27,9 +22,9 @@ export const Note = ({ note }) => {
 
   const handleHoverNote = (e) => {
     if (noteRef && noteRef.current.contains(e.target)) {
-      setNoteIsHovered(true);
+      setoverlayIsVisible(true);
     } else {
-      setNoteIsHovered(false);
+      setoverlayIsVisible(false);
     }
   };
 
@@ -51,11 +46,7 @@ export const Note = ({ note }) => {
       >
         <div className={styles.noteTitle}>{note.title}</div>
         <div className={styles.noteText}>{note.text}</div>
-        {noteIsHovered && <NoteOverlay ref={overlayRef} />}
-        <NoteOptionsFooter
-          ref={optionsFooterRef}
-          noteIsHovered={noteIsHovered}
-        />
+        <NoteOverlay overlayIsVisible={overlayIsVisible} ref={overlayRef} />
       </div>
       {isEditing && (
         <NoteEditModal isEditingState={[isEditing, setIsEditing]} note={note} />
@@ -64,30 +55,33 @@ export const Note = ({ note }) => {
   );
 };
 
-const NoteOptionsFooter = forwardRef(({ noteIsHovered }, ref) => {
-  return (
-    <>
-      <div
-        className={`${styles.optionsFooter} ${
-          noteIsHovered ? "" : styles.hidden
-        }`}
-        ref={ref}
-      >
-        <div className={styles.optionsFooterOptions}>
-          <BsTrash className={styles.optionsFooterOption} />
-        </div>
-        <BsThreeDotsVertical className={styles.optionsFooterOption} />
-      </div>
-    </>
-  );
-});
-
-const NoteOverlay = forwardRef((_, ref) => {
+const NoteOverlay = forwardRef(({ overlayIsVisible }, ref) => {
   return (
     <>
       <div ref={ref}>
-        <IoCheckmarkCircleOutline className={styles.overlaySelect} size={25} />
-        <BsPin className={styles.overlayPin} size={25} />
+        <IoCheckmarkCircleOutline
+          className={`${styles.overlaySelect} ${
+            overlayIsVisible ? "" : styles.hidden
+          }`}
+          size={25}
+        />
+        <BsPin
+          className={`${styles.overlayPin} ${
+            overlayIsVisible ? "" : styles.hidden
+          }`}
+          size={25}
+        />
+        <div
+          className={`${styles.optionsFooter} ${
+            overlayIsVisible ? "" : styles.hidden
+          }`}
+          ref={ref}
+        >
+          <div className={styles.optionsFooterOptions}>
+            <BsTrash className={styles.optionsFooterOption} />
+          </div>
+          <BsThreeDotsVertical className={styles.optionsFooterOption} />
+        </div>
       </div>
     </>
   );

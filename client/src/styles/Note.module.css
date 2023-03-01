@@ -14,20 +14,6 @@
   font-size: 20px;
 }
 
-.optionsFooter {
-  margin-top: 10px;
-  display: flex;
-  justify-content: space-between;
-}
-
-.optionsFooterOption {
-  cursor: pointer;
-}
-
-.hidden {
-  opacity: 0;
-}
-
 /* OVERLAY */
 
 .overlaySelect {
@@ -48,4 +34,18 @@
 .overlaySelect:hover {
   color: red;
   cursor: pointer;
+}
+
+.optionsFooter {
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.optionsFooterOption {
+  cursor: pointer;
+}
+
+.hidden {
+  opacity: 0;
 }
