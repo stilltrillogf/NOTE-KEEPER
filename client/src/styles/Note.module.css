@@ -32,7 +32,6 @@
 
 .overlayPin:hover,
 .overlaySelect:hover {
-  color: red;
   cursor: pointer;
 }
 

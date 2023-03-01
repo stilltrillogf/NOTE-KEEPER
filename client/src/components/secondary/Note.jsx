@@ -5,16 +5,17 @@ import { BsTrash, BsThreeDotsVertical } from "react-icons/bs";
 
 import styles from "../../styles/Note.module.css";
 import { NoteEditModal } from "./NoteEditModal";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { deleteNoteRequest } from "../../API/deleteNoteRequest";
 
 export const Note = ({ note }) => {
   const [isEditing, setIsEditing] = useState(false);
-  const [overlayIsVisible, setoverlayIsVisible] = useState(false);
+  const [overlayIsVisible, setOverlayIsVisible] = useState(false);
   const noteRef = useRef(null);
   const overlayRef = useRef(null);
 
   const handleClickNote = (e) => {
     if (overlayRef && overlayRef.current.contains(e.target)) {
-      console.log("overlay");
       return;
     }
     setIsEditing(true);
@@ -22,9 +23,9 @@ export const Note = ({ note }) => {
 
   const handleHoverNote = (e) => {
     if (noteRef && noteRef.current.contains(e.target)) {
-      setoverlayIsVisible(true);
+      setOverlayIsVisible(true);
     } else {
-      setoverlayIsVisible(false);
+      setOverlayIsVisible(false);
     }
   };
 
@@ -46,7 +47,11 @@ export const Note = ({ note }) => {
       >
         <div className={styles.noteTitle}>{note.title}</div>
         <div className={styles.noteText}>{note.text}</div>
-        <NoteOverlay overlayIsVisible={overlayIsVisible} ref={overlayRef} />
+        <NoteOverlay
+          note={note}
+          overlayIsVisible={overlayIsVisible}
+          ref={overlayRef}
+        />
       </div>
       {isEditing && (
         <NoteEditModal isEditingState={[isEditing, setIsEditing]} note={note} />
@@ -55,7 +60,25 @@ export const Note = ({ note }) => {
   );
 };
 
-const NoteOverlay = forwardRef(({ overlayIsVisible }, ref) => {
+const NoteOverlay = forwardRef(({ note, overlayIsVisible }, ref) => {
+  const queryClient = useQueryClient();
+
+  const { mutate: deleteNote } = useMutation(
+    (note) => {
+      return deleteNoteRequest(note);
+    },
+    {
+      onSettled: (_, err) => {
+        err && console.log(err);
+        queryClient.invalidateQueries("notes");
+      },
+    }
+  );
+
+  const handleDeleteNote = () => {
+    deleteNote(note);
+  };
+
   return (
     <>
       <div ref={ref}>
@@ -78,7 +101,10 @@ const NoteOverlay = forwardRef(({ overlayIsVisible }, ref) => {
           ref={ref}
         >
           <div className={styles.optionsFooterOptions}>
-            <BsTrash className={styles.optionsFooterOption} />
+            <BsTrash
+              onClick={handleDeleteNote}
+              className={styles.optionsFooterOption}
+            />
           </div>
           <BsThreeDotsVertical className={styles.optionsFooterOption} />
         </div>
