@@ -3,6 +3,7 @@
   border-radius: 10px;
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   padding: 10px;
   cursor: pointer;
   word-wrap: break-word;
@@ -11,4 +12,35 @@
 
 .noteTitle {
   font-size: 20px;
+}
+
+.overlaySelect {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: translate(-50%, -50%);
+  cursor: default;
+}
+
+.overlaySelect:hover {
+  color: red;
+}
+
+.overlayPin {
+  position: absolute;
+  top: 0;
+  right: 0;
+  transform: translate(45%, -45%);
+  cursor: default;
+}
+
+.overlayPin:hover {
+  color: red;
+}
+
+.overlayFooter {
+}
+
+.hidden {
+  opacity: 0;
 }
