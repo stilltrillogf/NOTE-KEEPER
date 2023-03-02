@@ -8,4 +8,6 @@
 .masonryNotesGridColumn > div {
   /* vertical gap between notes */
   margin-bottom: 15px;
+  /* max-height: 600px; */
+  /* overflow: hidden; */
 }

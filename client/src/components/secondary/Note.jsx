@@ -45,8 +45,14 @@ export const Note = ({ note }) => {
         key={note._id}
         ref={noteRef}
       >
-        <div className={styles.noteTitle}>{note.title}</div>
-        <div className={styles.noteText}>{note.text}</div>
+        <div className={styles.noteTitle}>
+          {note.title.length > 150
+            ? note.title.slice(0, 150) + "..."
+            : note.title}
+        </div>
+        <div className={styles.noteText}>
+          {note.text.length > 300 ? note.text.slice(0, 300) + "..." : note.text}
+        </div>
         <NoteOverlay
           note={note}
           overlayIsVisible={overlayIsVisible}
