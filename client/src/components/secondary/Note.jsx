@@ -37,6 +37,11 @@ export const Note = ({ note }) => {
     };
   }, [handleHoverNote]);
 
+  useEffect(() => {
+    isEditing && (document.body.style.overflow = "hidden");
+    !isEditing && (document.body.style.overflow = "");
+  }, [isEditing]);
+
   return (
     <>
       <div

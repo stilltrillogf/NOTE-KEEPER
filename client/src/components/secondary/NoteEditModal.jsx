@@ -60,6 +60,7 @@ export const NoteEditModal = ({ note, isEditingState }) => {
 
   useEffect(() => {
     focusTheEndOfText(textInputRef.current);
+    textInputRef.current.scrollIntoView();
   }, []);
 
   useEffect(() => {
