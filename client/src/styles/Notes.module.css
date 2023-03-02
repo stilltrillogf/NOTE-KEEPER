@@ -1,8 +1,11 @@
-.notesGrid {
-  width: 100%;
-  display: grid;
-  grid-template-columns: repeat(3, 200px);
-  grid-template-rows: auto;
-  gap: 25px;
-  justify-content: center;
+.masonryNotesGrid {
+  display: flex;
+  width: 600px;
+  gap: 30px; /* horizontal gap between notes */
+  margin-left: -60px; /* gap offset */
+}
+
+.masonryNotesGridColumn > div {
+  /* vertical gap between notes */
+  margin-bottom: 15px;
 }
