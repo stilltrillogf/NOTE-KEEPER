@@ -1,4 +1,4 @@
-@import "./variables.css";
+@import "../variables.css";
 
 .wrapper {
   border: 1px solid black;

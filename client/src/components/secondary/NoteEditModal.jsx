@@ -4,11 +4,19 @@ import { BsTrash } from "react-icons/bs";
 
 import { deleteNoteRequest } from "../../API/deleteNoteRequest";
 import { updateNoteRequest } from "../../API/updateNoteRequest";
-import styles from "../../styles/NoteEditModal.module.css";
+import styles from "../../styles/secondary/NoteEditModal.module.css";
+import { ConfirmationPopup } from "../utility/ConfirmationPopup";
 
-export const NoteEditModal = ({ note, isEditingState }) => {
+export const NoteEditModal = ({
+  note,
+  isEditingState,
+  popupStorage,
+  setPopupStorage,
+}) => {
   const [isEditing, setIsEditing] = isEditingState;
   const [updatedNote, setUpdatedNote] = useState(note);
+  const [popupIsVisible, setPopupIsVisible] = useState(false);
+
   const modalRef = useRef(null);
   const textInputRef = useRef(null);
 
@@ -39,7 +47,8 @@ export const NoteEditModal = ({ note, isEditingState }) => {
   );
 
   const handleDeleteNote = () => {
-    deleteNote(note);
+    popupStorage === null && setPopupIsVisible(true);
+    popupStorage === true && deleteNote(note);
   };
 
   const handleFinishEditing = () => {
@@ -106,6 +115,13 @@ export const NoteEditModal = ({ note, isEditingState }) => {
             Close
           </div>
         </div>
+        {popupIsVisible && (
+          <ConfirmationPopup
+            setPopupStorage={setPopupStorage}
+            note={note}
+            setPopupIsVisible={setPopupIsVisible}
+          />
+        )}
       </div>
     </>
   );
