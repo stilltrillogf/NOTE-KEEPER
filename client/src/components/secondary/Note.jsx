@@ -9,9 +9,10 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { deleteNoteRequest } from "../../API/deleteNoteRequest";
 import { ConfirmationPopup } from "../utility/ConfirmationPopup";
 
-export const Note = ({ note }) => {
+export const Note = ({ note, popupStorage, setPopupStorage }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [overlayIsVisible, setOverlayIsVisible] = useState(false);
+
   const noteRef = useRef(null);
   const overlayRef = useRef(null);
 
@@ -29,6 +30,8 @@ export const Note = ({ note }) => {
       setOverlayIsVisible(false);
     }
   };
+
+  const handleClosePopup = () => {};
 
   useEffect(() => {
     window.addEventListener("mouseover", handleHoverNote);
@@ -60,80 +63,86 @@ export const Note = ({ note }) => {
           {note.text.length > 300 ? note.text.slice(0, 300) + "..." : note.text}
         </div>
         <NoteOverlay
+          popupStorage={popupStorage}
+          setPopupStorage={setPopupStorage}
           note={note}
           overlayIsVisible={overlayIsVisible}
           ref={overlayRef}
         />
       </div>
       {isEditing && (
-        <NoteEditModal isEditingState={[isEditing, setIsEditing]} note={note} />
+        <NoteEditModal
+          popupStorage={popupStorage}
+          setPopupStorage={setPopupStorage}
+          isEditingState={[isEditing, setIsEditing]}
+          note={note}
+        />
       )}
     </>
   );
 };
 
-const NoteOverlay = forwardRef(({ note, overlayIsVisible }, ref) => {
-  const [popupIsVisible, setPopupIsVisible] = useState(true);
-  const queryClient = useQueryClient();
+const NoteOverlay = forwardRef(
+  ({ note, overlayIsVisible, popupStorage, setPopupStorage }, ref) => {
+    const [popupIsVisible, setPopupIsVisible] = useState(false);
 
-  const { mutate: deleteNote } = useMutation(
-    (note) => {
-      return deleteNoteRequest(note);
-    },
-    {
-      onSettled: (_, err) => {
-        err && console.log(err);
-        queryClient.invalidateQueries("notes");
+    const queryClient = useQueryClient();
+
+    const { mutate: deleteNote } = useMutation(
+      (note) => {
+        return deleteNoteRequest(note);
       },
-    }
-  );
+      {
+        onSettled: (_, err) => {
+          err && console.log(err);
+          queryClient.invalidateQueries("notes");
+        },
+      }
+    );
 
-  const handleDeleteNote = () => {
-    // Check for popup info in session storage
+    const handleDeleteNote = () => {
+      popupStorage === null && setPopupIsVisible(true);
+      popupStorage === true && deleteNote(note);
+    };
 
-    // if no info - setPopupIsVisible(true)
-
-    // if info - deleteNote(note);
-
-    deleteNote(note);
-  };
-
-  return (
-    <>
-      <div ref={ref}>
-        <IoCheckmarkCircleOutline
-          className={`${styles.overlaySelect} ${
-            overlayIsVisible ? "" : styles.hidden
-          }`}
-          size={25}
-        />
-        <BsPin
-          className={`${styles.overlayPin} ${
-            overlayIsVisible ? "" : styles.hidden
-          }`}
-          size={25}
-        />
-        <div
-          className={`${styles.optionsFooter} ${
-            overlayIsVisible ? "" : styles.hidden
-          }`}
-          ref={ref}
-        >
-          <div className={styles.optionsFooterOptions}>
-            <BsTrash
-              onClick={handleDeleteNote}
-              className={styles.optionsFooterOption}
-            />
-          </div>
-          <BsThreeDotsVertical className={styles.optionsFooterOption} />
-        </div>
-        {popupIsVisible && (
-          <ConfirmationPopup
-            note={note}
-            setPopupIsVisible={setPopupIsVisible}
+    return (
+      <>
+        <div ref={ref}>
+          <IoCheckmarkCircleOutline
+            className={`${styles.overlaySelect} ${
+              overlayIsVisible ? "" : styles.hidden
+            }`}
+            size={25}
           />
-        )}
-      </div>
-    </>
-  );
-});
+          <BsPin
+            className={`${styles.overlayPin} ${
+              overlayIsVisible ? "" : styles.hidden
+            }`}
+            size={25}
+          />
+          <div
+            className={`${styles.optionsFooter} ${
+              overlayIsVisible ? "" : styles.hidden
+            }`}
+            ref={ref}
+          >
+            <div className={styles.optionsFooterOptions}>
+              <BsTrash
+                onClick={handleDeleteNote}
+                className={styles.optionsFooterOption}
+              />
+            </div>
+            <BsThreeDotsVertical className={styles.optionsFooterOption} />
+          </div>
+          {popupIsVisible && (
+            <ConfirmationPopup
+              setPopupStorage={setPopupStorage}
+              note={note}
+              setPopupIsVisible={setPopupIsVisible}
+            />
+          )}
+        </div>
+      </>
+    );
+  }
+);

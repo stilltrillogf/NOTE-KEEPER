@@ -1,21 +1,49 @@
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import React, { useState } from "react";
+import { deleteNoteRequest } from "../../API/deleteNoteRequest";
 
 import styles from "../../styles/utility/ConfirmationPopup.module.css";
 
-export const ConfirmationPopup = ({ setPopupIsVisible, note }) => {
+export const ConfirmationPopup = ({
+  setPopupIsVisible,
+  setPopupStorage,
+  note,
+}) => {
   const [checkboxIsChecked, setCheckboxIsChecked] = useState(false);
 
+  const queryClient = useQueryClient();
+
+  const { mutate: deleteNote } = useMutation(
+    (note) => {
+      return deleteNoteRequest(note);
+    },
+    {
+      onSettled: (_, err) => {
+        err && console.log(err);
+        queryClient.invalidateQueries("notes");
+      },
+    }
+  );
+
   const handleYesClick = () => {
-    // If checkbox was ticked - save this in session storage
-    // deleteNote(note) then setPopupIsVisible(false)
-    // If checkbox was not ticked
-    // deleteNote(note) then setPopupIsVisible(false)
+    if (checkboxIsChecked) {
+      window.sessionStorage.setItem("displayPopup", true);
+      setPopupStorage(
+        JSON.parse(window.sessionStorage.getItem("displayPopup"))
+      );
+    }
+    setPopupIsVisible(false);
+    deleteNote(note);
   };
 
   const handleNoClick = () => {
-    // If checkbox was ticked - save this in session storage
-    // setPopupIsVisible(false);
-    // If checkbox was not ticked - setPopupIsVisible(false)
+    if (checkboxIsChecked) {
+      window.sessionStorage.setItem("displayPopup", true);
+      setPopupStorage(
+        JSON.parse(window.sessionStorage.getItem("displayPopup"))
+      );
+    }
+    setPopupIsVisible(false);
   };
 
   return (
