@@ -4,7 +4,7 @@ import { BsTrash } from "react-icons/bs";
 
 import { deleteNoteRequest } from "../../API/deleteNoteRequest";
 import { updateNoteRequest } from "../../API/updateNoteRequest";
-import styles from "../../styles/NoteEditModal.module.css";
+import styles from "../../styles/secondary/NoteEditModal.module.css";
 
 export const NoteEditModal = ({ note, isEditingState }) => {
   const [isEditing, setIsEditing] = isEditingState;

@@ -3,7 +3,7 @@ import { BsPin } from "react-icons/bs";
 import { IoCheckmarkCircleOutline } from "react-icons/io5";
 import { BsTrash, BsThreeDotsVertical } from "react-icons/bs";
 
-import styles from "../../styles/Note.module.css";
+import styles from "../../styles/secondary/Note.module.css";
 import { NoteEditModal } from "./NoteEditModal";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { deleteNoteRequest } from "../../API/deleteNoteRequest";

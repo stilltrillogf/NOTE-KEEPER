@@ -1,7 +1,7 @@
 import React from "react";
 import Masonry from "react-masonry-css";
 import { Note } from "./Note";
-import styles from "../../styles/Notes.module.css";
+import styles from "../../styles/secondary/Notes.module.css";
 
 export const Notes = ({ notes }) => {
   return (

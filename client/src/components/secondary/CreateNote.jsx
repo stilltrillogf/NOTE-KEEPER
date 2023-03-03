@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-import styles from "../../styles/CreateNote.module.css";
+import styles from "../../styles/secondary/CreateNote.module.css";
 import { createNoteRequest } from "../../API/createNoteRequest";
 
 export const CreateNote = () => {
