@@ -7,6 +7,7 @@ import styles from "../../styles/secondary/Note.module.css";
 import { NoteEditModal } from "./NoteEditModal";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { deleteNoteRequest } from "../../API/deleteNoteRequest";
+import { ConfirmationPopup } from "../utility/ConfirmationPopup";
 
 export const Note = ({ note }) => {
   const [isEditing, setIsEditing] = useState(false);
@@ -72,6 +73,7 @@ export const Note = ({ note }) => {
 };
 
 const NoteOverlay = forwardRef(({ note, overlayIsVisible }, ref) => {
+  const [popupIsVisible, setPopupIsVisible] = useState(true);
   const queryClient = useQueryClient();
 
   const { mutate: deleteNote } = useMutation(
@@ -87,6 +89,12 @@ const NoteOverlay = forwardRef(({ note, overlayIsVisible }, ref) => {
   );
 
   const handleDeleteNote = () => {
+    // Check for popup info in session storage
+
+    // if no info - setPopupIsVisible(true)
+
+    // if info - deleteNote(note);
+
     deleteNote(note);
   };
 
@@ -119,6 +127,12 @@ const NoteOverlay = forwardRef(({ note, overlayIsVisible }, ref) => {
           </div>
           <BsThreeDotsVertical className={styles.optionsFooterOption} />
         </div>
+        {popupIsVisible && (
+          <ConfirmationPopup
+            note={note}
+            setPopupIsVisible={setPopupIsVisible}
+          />
+        )}
       </div>
     </>
   );
