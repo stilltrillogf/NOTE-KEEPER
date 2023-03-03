@@ -31,8 +31,6 @@ export const Note = ({ note, popupStorage, setPopupStorage }) => {
     }
   };
 
-  const handleClosePopup = () => {};
-
   useEffect(() => {
     window.addEventListener("mouseover", handleHoverNote);
 

@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { deleteNoteRequest } from "../../API/deleteNoteRequest";
 
 import styles from "../../styles/utility/ConfirmationPopup.module.css";
@@ -10,6 +10,7 @@ export const ConfirmationPopup = ({
   note,
 }) => {
   const [checkboxIsChecked, setCheckboxIsChecked] = useState(false);
+  const popupRef = useRef(null);
 
   const queryClient = useQueryClient();
 
@@ -25,7 +26,7 @@ export const ConfirmationPopup = ({
     }
   );
 
-  const handleYesClick = () => {
+  const handleYesBtnClick = () => {
     if (checkboxIsChecked) {
       window.sessionStorage.setItem("displayPopup", true);
       setPopupStorage(
@@ -36,7 +37,7 @@ export const ConfirmationPopup = ({
     deleteNote(note);
   };
 
-  const handleNoClick = () => {
+  const handleNoBtnClick = () => {
     if (checkboxIsChecked) {
       window.sessionStorage.setItem("displayPopup", true);
       setPopupStorage(
@@ -46,16 +47,30 @@ export const ConfirmationPopup = ({
     setPopupIsVisible(false);
   };
 
+  const handleClickOutside = (e) => {
+    if (popupRef && !popupRef.current.contains(e.target)) {
+      setPopupIsVisible(false);
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      window.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [handleClickOutside]);
+
   return (
-    <div className={styles.popup}>
+    <div ref={popupRef} className={styles.popup}>
       <div className={styles.information}>
         Are you sure you want to delete this note?
       </div>
       <div className={styles.buttonsField}>
-        <button className={styles.button} onClick={handleYesClick}>
+        <button className={styles.button} onClick={handleYesBtnClick}>
           Yes
         </button>
-        <button className={styles.button} onClick={handleNoClick}>
+        <button className={styles.button} onClick={handleNoBtnClick}>
           No
         </button>
       </div>
