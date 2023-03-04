@@ -1,13 +1,17 @@
+.notesGrid {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+  justify-content: center;
+}
+
 .masonryNotesGrid {
   display: flex;
-  width: 600px;
-  gap: 30px; /* horizontal gap between notes */
-  margin-left: -60px; /* gap offset */
+  width: 200px;
+  gap: 30px;
 }
 
 .masonryNotesGridColumn > div {
   /* vertical gap between notes */
   margin-bottom: 15px;
-  /* max-height: 600px; */
-  /* overflow: hidden; */
 }
