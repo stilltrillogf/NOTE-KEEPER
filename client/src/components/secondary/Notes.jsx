@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Masonry from "react-masonry-css";
 import { Note } from "./Note";
 import styles from "../../styles/secondary/Notes.module.css";
@@ -10,37 +10,12 @@ export const Notes = ({ notes }) => {
     Math.floor(window.innerWidth / 250)
   );
   const [columns, setColumns] = useState(
-    Array.from({ length: columnsNumber }, (_, index) => {
-      return (
-        <Masonry
-          key={index}
-          breakpointCols={1}
-          className={styles.masonryNotesGrid}
-          columnClassName={styles.masonryNotesGridColumn}
-        ></Masonry>
-      );
-    })
+    splitNotesBetweenColumns(notes, columnsNumber)
   );
-  const [columnsState, setColumnsState] = useState({
-    col1: [],
-    col2: [],
-    col3: [],
-  });
 
   const handleGridWidthChange = () => {
     setColumnsNumber(Math.floor(window.innerWidth / 250));
-    setColumns(
-      Array.from({ length: columnsNumber }, (_, index) => {
-        return (
-          <Masonry
-            key={index}
-            breakpointCols={1}
-            className={styles.masonryNotesGrid}
-            columnClassName={styles.masonryNotesGridColumn}
-          ></Masonry>
-        );
-      })
-    );
+    setColumns(splitNotesBetweenColumns(notes, columnsNumber));
   };
 
   useEffect(() => {
@@ -55,16 +30,18 @@ export const Notes = ({ notes }) => {
     };
   }, [handleGridWidthChange]);
 
+  useEffect(() => {
+    setColumns(splitNotesBetweenColumns(notes, columnsNumber));
+  }, [notes, columnsNumber]);
+
+  /*
+when the note is deleted, columns doesn't update indexes so one note becomes undefined 
+*/
+
+  console.log(columns);
   return (
     <div className={styles.notesGrid}>
-      {/* Make it fit as many columns as it can with current width
-      -> calculate number of columns based on current width
-      -> render this amount of columns
-      -> make the state for this amount of columns
-      -> split notes between this amount of columns
-
-       */}
-      {columns.map((_, index) => {
+      {columns.map((colNotes, index) => {
         return (
           <Masonry
             key={index}
@@ -72,10 +49,33 @@ export const Notes = ({ notes }) => {
             className={styles.masonryNotesGrid}
             columnClassName={styles.masonryNotesGridColumn}
           >
-            <Note note={notes[1]} />
+            {colNotes.map((notesIndex, index) => {
+              if (!notes[notesIndex]) return;
+
+              return (
+                <Note
+                  key={index}
+                  popupStorage={popupStorage}
+                  setPopupStorage={setPopupStorage}
+                  note={notes[notesIndex]}
+                />
+              );
+            })}
           </Masonry>
         );
       })}
     </div>
   );
 };
+
+function splitNotesBetweenColumns(notes, columnsNumber) {
+  const containers = Array.from({ length: columnsNumber }, () => []);
+  let currentIndex = 0;
+
+  notes.forEach((_, i) => {
+    containers[currentIndex].push(i);
+    currentIndex = (currentIndex + 1) % columnsNumber;
+  });
+
+  return containers;
+}
