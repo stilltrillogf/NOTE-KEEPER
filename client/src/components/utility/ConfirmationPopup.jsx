@@ -8,6 +8,7 @@ export const ConfirmationPopup = ({
   setPopupIsVisible,
   setPopupStorage,
   note,
+  setIsEditing,
 }) => {
   const [checkboxIsChecked, setCheckboxIsChecked] = useState(false);
   const popupRef = useRef(null);
@@ -35,6 +36,7 @@ export const ConfirmationPopup = ({
     }
     setPopupIsVisible(false);
     deleteNote(note);
+    setIsEditing && setIsEditing(false);
   };
 
   const handleNoBtnClick = () => {

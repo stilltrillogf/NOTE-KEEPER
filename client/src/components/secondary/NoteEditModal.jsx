@@ -48,7 +48,10 @@ export const NoteEditModal = ({
 
   const handleDeleteNote = () => {
     popupStorage === null && setPopupIsVisible(true);
-    popupStorage === true && deleteNote(note);
+    if (popupStorage) {
+      deleteNote(note);
+      setIsEditing(false);
+    }
   };
 
   const handleFinishEditing = () => {
@@ -117,6 +120,7 @@ export const NoteEditModal = ({
         </div>
         {popupIsVisible && (
           <ConfirmationPopup
+            setIsEditing={setIsEditing}
             setPopupStorage={setPopupStorage}
             note={note}
             setPopupIsVisible={setPopupIsVisible}
