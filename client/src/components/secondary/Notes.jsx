@@ -34,14 +34,11 @@ export const Notes = ({ notes }) => {
     setColumns(splitNotesBetweenColumns(notes, columnsNumber));
   }, [notes, columnsNumber]);
 
-  /*
-when the note is deleted, columns doesn't update indexes so one note becomes undefined 
-*/
-
   console.log(columns);
+
   return (
     <div className={styles.notesGrid}>
-      {columns.map((colNotes, index) => {
+      {columns.map((columnNotes, index) => {
         return (
           <Masonry
             key={index}
@@ -49,15 +46,15 @@ when the note is deleted, columns doesn't update indexes so one note becomes und
             className={styles.masonryNotesGrid}
             columnClassName={styles.masonryNotesGridColumn}
           >
-            {colNotes.map((notesIndex, index) => {
-              if (!notes[notesIndex]) return;
+            {columnNotes.map((noteId) => {
+              if (!noteId) return;
 
               return (
                 <Note
-                  key={index}
+                  key={noteId}
                   popupStorage={popupStorage}
                   setPopupStorage={setPopupStorage}
-                  note={notes[notesIndex]}
+                  note={notes.find((note) => note._id === noteId)}
                 />
               );
             })}
@@ -72,8 +69,8 @@ function splitNotesBetweenColumns(notes, columnsNumber) {
   const containers = Array.from({ length: columnsNumber }, () => []);
   let currentIndex = 0;
 
-  notes.forEach((_, i) => {
-    containers[currentIndex].push(i);
+  notes.forEach((note) => {
+    containers[currentIndex].push(note._id);
     currentIndex = (currentIndex + 1) % columnsNumber;
   });
 
