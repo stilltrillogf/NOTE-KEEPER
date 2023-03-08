@@ -31,7 +31,7 @@ export const Note = ({ note, popupStorage, setPopupStorage }) => {
   };
 
   const handleDragStart = (e) => {
-    console.log(e.target);
+    console.log(note.position);
   };
 
   const handleDragEnter = (e) => {
@@ -43,7 +43,7 @@ export const Note = ({ note, popupStorage, setPopupStorage }) => {
   };
 
   const handleDrop = (e) => {
-    console.log(`dropped at note ${note._id}`);
+    console.log(`dropped at note ${note.position}`);
   };
 
   useEffect(() => {

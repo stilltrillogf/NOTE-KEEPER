@@ -44,14 +44,14 @@ export const Notes = ({ notes }) => {
             columnClassName={styles.masonryNotesGridColumn}
           >
             {columnNotes.map((noteId) => {
-              if (!noteId) return;
-
+              const note = notes.find((note) => note._id === noteId);
+              if (!note) return;
               return (
                 <Note
                   key={noteId}
                   popupStorage={popupStorage}
                   setPopupStorage={setPopupStorage}
-                  note={notes.find((note) => note._id === noteId)}
+                  note={note}
                 />
               );
             })}

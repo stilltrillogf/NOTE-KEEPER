@@ -4,7 +4,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import styles from "../../styles/secondary/CreateNote.module.css";
 import { createNoteRequest } from "../../API/createNoteRequest";
 
-export const CreateNote = () => {
+export const CreateNote = ({ notes }) => {
   const [note, setNote] = useState(initialNote);
   const [isTakingANote, setIsTakingANote] = useState(false);
   const wrapperRef = useRef(null);
@@ -58,6 +58,7 @@ export const CreateNote = () => {
     >
       {isTakingANote ? (
         <CreateNoteActive
+          notes={notes}
           note={note}
           setNote={setNote}
           handleFinishTakingANote={handleFinishTakingANote}
@@ -72,16 +73,20 @@ export const CreateNote = () => {
   );
 };
 
-const initialNote = {
-  title: "",
-  text: "",
-};
-
-const CreateNoteActive = ({ note, setNote, handleFinishTakingANote }) => {
+const CreateNoteActive = ({
+  notes,
+  note,
+  setNote,
+  handleFinishTakingANote,
+}) => {
   const textInputRef = useRef(null);
 
   useEffect(() => {
     textInputRef.current.focus();
+  }, []);
+
+  useEffect(() => {
+    setNote({ ...note, position: notes.length + 1 });
   }, []);
 
   return (
@@ -115,4 +120,9 @@ const CreateNoteActive = ({ note, setNote, handleFinishTakingANote }) => {
       </div>
     </div>
   );
+};
+
+const initialNote = {
+  title: "",
+  text: "",
 };
