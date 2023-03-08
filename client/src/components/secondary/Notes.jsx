@@ -14,12 +14,12 @@ export const Notes = ({ notes }) => {
     Math.floor(window.innerWidth / 250)
   );
   const [columns, setColumns] = useState(
-    splitNotesBetweenColumns(notes, columnsNumber)
+    splitNotesBetweenColumns(sortedNotes, columnsNumber)
   );
 
   const handleGridWidthChange = () => {
     setColumnsNumber(Math.floor(window.innerWidth / 250));
-    setColumns(splitNotesBetweenColumns(notes, columnsNumber));
+    setColumns(splitNotesBetweenColumns(sortedNotes, columnsNumber));
   };
 
   useEffect(() => {
@@ -35,8 +35,16 @@ export const Notes = ({ notes }) => {
   }, [handleGridWidthChange]);
 
   useEffect(() => {
-    setColumns(splitNotesBetweenColumns(notes, columnsNumber));
-  }, [notes, columnsNumber]);
+    setColumns(splitNotesBetweenColumns(sortedNotes, columnsNumber));
+  }, [sortedNotes, columnsNumber]);
+
+  useEffect(() => {
+    setSortedNotes(
+      notes.sort((a, b) => {
+        return a.position - b.position;
+      })
+    );
+  }, [notes]);
 
   return (
     <div className={styles.notesGrid}>
@@ -48,12 +56,11 @@ export const Notes = ({ notes }) => {
             className={styles.masonryNotesGrid}
             columnClassName={styles.masonryNotesGridColumn}
           >
-            {columnNotes.map((noteId) => {
-              const note = notes.find((note) => note._id === noteId);
+            {columnNotes.map((note) => {
               if (!note) return;
               return (
                 <Note
-                  key={noteId}
+                  key={note._id}
                   popupStorage={popupStorage}
                   setPopupStorage={setPopupStorage}
                   note={note}
@@ -72,7 +79,7 @@ function splitNotesBetweenColumns(notes, columnsNumber) {
   let currentIndex = 0;
 
   notes.forEach((note) => {
-    columns[currentIndex].push(note._id);
+    columns[currentIndex].push(note);
     currentIndex = (currentIndex + 1) % columnsNumber;
   });
 
