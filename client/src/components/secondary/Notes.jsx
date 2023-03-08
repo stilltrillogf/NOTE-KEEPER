@@ -5,7 +5,6 @@ import styles from "../../styles/secondary/Notes.module.css";
 
 export const Notes = ({ notes }) => {
   const [popupStorage, setPopupStorage] = useState(null);
-
   const [columnsNumber, setColumnsNumber] = useState(
     Math.floor(window.innerWidth / 250)
   );
@@ -33,8 +32,6 @@ export const Notes = ({ notes }) => {
   useEffect(() => {
     setColumns(splitNotesBetweenColumns(notes, columnsNumber));
   }, [notes, columnsNumber]);
-
-  console.log(columns);
 
   return (
     <div className={styles.notesGrid}>
@@ -66,13 +63,13 @@ export const Notes = ({ notes }) => {
 };
 
 function splitNotesBetweenColumns(notes, columnsNumber) {
-  const containers = Array.from({ length: columnsNumber }, () => []);
+  const columns = Array.from({ length: columnsNumber }, () => []);
   let currentIndex = 0;
 
   notes.forEach((note) => {
-    containers[currentIndex].push(note._id);
+    columns[currentIndex].push(note._id);
     currentIndex = (currentIndex + 1) % columnsNumber;
   });
 
-  return containers;
+  return columns;
 }

@@ -12,7 +12,6 @@ import { ConfirmationPopup } from "../utility/ConfirmationPopup";
 export const Note = ({ note, popupStorage, setPopupStorage }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [overlayIsVisible, setOverlayIsVisible] = useState(false);
-
   const noteRef = useRef(null);
   const overlayRef = useRef(null);
 
@@ -29,6 +28,22 @@ export const Note = ({ note, popupStorage, setPopupStorage }) => {
     } else {
       setOverlayIsVisible(false);
     }
+  };
+
+  const handleDragStart = (e) => {
+    console.log(e.target);
+  };
+
+  const handleDragEnter = (e) => {
+    e.preventDefault();
+  };
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
+  };
+
+  const handleDrop = (e) => {
+    console.log(`dropped at note ${note._id}`);
   };
 
   useEffect(() => {
@@ -51,6 +66,11 @@ export const Note = ({ note, popupStorage, setPopupStorage }) => {
         className={styles.note}
         key={note._id}
         ref={noteRef}
+        draggable="true"
+        onDragStart={handleDragStart}
+        onDragEnter={handleDragEnter}
+        onDragOver={handleDragOver}
+        onDrop={handleDrop}
       >
         <div className={styles.noteTitle}>
           {note.title.length > 150
