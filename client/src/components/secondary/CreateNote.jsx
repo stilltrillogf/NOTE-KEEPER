@@ -94,7 +94,17 @@ const CreateNoteActive = ({
   }, []);
 
   useEffect(() => {
-    setNote({ ...note, position: notes.length + 1 });
+    if (notes.length === 0) {
+      setNote({
+        ...note,
+        position: 1,
+      });
+    } else {
+      setNote({
+        ...note,
+        position: notes.at(-1).position + 1,
+      });
+    }
   }, []);
 
   return (

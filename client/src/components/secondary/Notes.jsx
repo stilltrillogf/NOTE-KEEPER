@@ -4,6 +4,11 @@ import { Note } from "./Note";
 import styles from "../../styles/secondary/Notes.module.css";
 
 export const Notes = ({ notes }) => {
+  const [sortedNotes, setSortedNotes] = useState(
+    notes.sort((a, b) => {
+      return a.position - b.position;
+    })
+  );
   const [popupStorage, setPopupStorage] = useState(null);
   const [columnsNumber, setColumnsNumber] = useState(
     Math.floor(window.innerWidth / 250)
