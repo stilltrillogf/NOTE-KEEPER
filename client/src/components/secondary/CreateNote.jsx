@@ -7,6 +7,7 @@ import { createNoteRequest } from "../../API/createNoteRequest";
 export const CreateNote = ({ notes }) => {
   const [note, setNote] = useState(initialNote);
   const [isTakingANote, setIsTakingANote] = useState(false);
+  const [timeoutIsActive, setTimeoutIsActive] = useState(false);
   const wrapperRef = useRef(null);
 
   const queryClient = useQueryClient();
@@ -23,12 +24,22 @@ export const CreateNote = ({ notes }) => {
     }
   );
 
+  const handleTakeANote = () => {
+    if (isTakingANote) return;
+    if (timeoutIsActive) return; // TODO: popup with info that user must wait
+    setIsTakingANote(true);
+  };
+
   const handleFinishTakingANote = () => {
     if (note.text === "" && note.title === "") setIsTakingANote(false);
     else {
       createNote(note);
       setNote(initialNote);
       setIsTakingANote(false);
+      setTimeoutIsActive(true);
+      setTimeout(() => {
+        setTimeoutIsActive(false);
+      }, 2500);
     }
   };
 
@@ -51,10 +62,7 @@ export const CreateNote = ({ notes }) => {
     <div
       className={isTakingANote ? styles.wrapperActive : styles.wrapper}
       ref={wrapperRef}
-      onClick={() => {
-        if (isTakingANote) return;
-        setIsTakingANote(true);
-      }}
+      onClick={handleTakeANote}
     >
       {isTakingANote ? (
         <CreateNoteActive
