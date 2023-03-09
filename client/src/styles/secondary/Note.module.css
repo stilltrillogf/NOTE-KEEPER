@@ -49,8 +49,9 @@
   opacity: 0;
 }
 
-.dropZone {
-  box-sizing: border-box;
-  border: 3px solid black;
-  border-style: dashed;
+.noteDropZone {
+  /* box-sizing: border-box; */
+  outline: 3px solid black;
+  outline-style: dashed;
+  border-color: white;
 }

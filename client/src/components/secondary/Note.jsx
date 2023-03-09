@@ -56,6 +56,7 @@ export const Note = ({
     e.nativeEvent.dataTransfer.setData("text/plain", JSON.stringify(note));
     setNoteIsDragged(true);
     setThisNoteIsDragged(true);
+    setOverlayIsVisible(false);
     e.nativeEvent.dataTransfer.effectAllowed = "move";
   };
 
@@ -100,7 +101,7 @@ export const Note = ({
       <div
         onClick={handleClickNote}
         className={`${styles.note} ${
-          noteIsDragged && thisNoteIsDragged === false && styles.dropZone
+          noteIsDragged && thisNoteIsDragged === false && styles.noteDropZone
         }`}
         key={note._id}
         ref={noteRef}
