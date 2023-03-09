@@ -16,6 +16,7 @@ export const Notes = ({ notes }) => {
   const [columns, setColumns] = useState(
     splitNotesBetweenColumns(sortedNotes, columnsNumber)
   );
+  const [noteIsDragged, setNoteIsDragged] = useState(false);
 
   const handleGridWidthChange = () => {
     setColumnsNumber(Math.floor(window.innerWidth / 250));
@@ -60,6 +61,8 @@ export const Notes = ({ notes }) => {
               if (!note) return;
               return (
                 <Note
+                  noteIsDragged={noteIsDragged}
+                  setNoteIsDragged={setNoteIsDragged}
                   key={note._id}
                   popupStorage={popupStorage}
                   setPopupStorage={setPopupStorage}

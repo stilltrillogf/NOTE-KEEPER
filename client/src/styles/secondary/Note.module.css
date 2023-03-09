@@ -48,3 +48,9 @@
 .hidden {
   opacity: 0;
 }
+
+.dropZone {
+  box-sizing: border-box;
+  border: 3px solid black;
+  border-style: dashed;
+}

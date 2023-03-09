@@ -10,9 +10,16 @@ import { deleteNoteRequest } from "../../API/deleteNoteRequest";
 import { ConfirmationPopup } from "../utility/ConfirmationPopup";
 import { updateNoteRequest } from "../../API/updateNoteRequest";
 
-export const Note = ({ note, popupStorage, setPopupStorage }) => {
+export const Note = ({
+  noteIsDragged,
+  setNoteIsDragged,
+  note,
+  popupStorage,
+  setPopupStorage,
+}) => {
   const [isEditing, setIsEditing] = useState(false);
   const [overlayIsVisible, setOverlayIsVisible] = useState(false);
+  const [thisNoteIsDragged, setThisNoteIsDragged] = useState(false);
   const noteRef = useRef(null);
   const overlayRef = useRef(null);
 
@@ -47,6 +54,14 @@ export const Note = ({ note, popupStorage, setPopupStorage }) => {
 
   const handleDragStart = (e) => {
     e.nativeEvent.dataTransfer.setData("text/plain", JSON.stringify(note));
+    setNoteIsDragged(true);
+    setThisNoteIsDragged(true);
+    e.nativeEvent.dataTransfer.effectAllowed = "move";
+  };
+
+  const handleDragEnd = (e) => {
+    setNoteIsDragged(false);
+    setThisNoteIsDragged(false);
   };
 
   const handleDragEnter = (e) => {
@@ -84,12 +99,15 @@ export const Note = ({ note, popupStorage, setPopupStorage }) => {
     <>
       <div
         onClick={handleClickNote}
-        className={styles.note}
+        className={`${styles.note} ${
+          noteIsDragged && thisNoteIsDragged === false && styles.dropZone
+        }`}
         key={note._id}
         ref={noteRef}
         data-position={note.position}
         draggable="true"
         onDragStart={handleDragStart}
+        onDragEnd={handleDragEnd}
         onDragEnter={handleDragEnter}
         onDragOver={handleDragOver}
         onDrop={handleDrop}
