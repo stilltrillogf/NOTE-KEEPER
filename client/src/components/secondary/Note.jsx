@@ -8,13 +8,34 @@ import { NoteEditModal } from "./NoteEditModal";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { deleteNoteRequest } from "../../API/deleteNoteRequest";
 import { ConfirmationPopup } from "../utility/ConfirmationPopup";
+import { updateNoteRequest } from "../../API/updateNoteRequest";
 
-export const Note = ({ note, popupStorage, setPopupStorage }) => {
+export const Note = ({
+  noteIsDragged,
+  setNoteIsDragged,
+  note,
+  popupStorage,
+  setPopupStorage,
+}) => {
   const [isEditing, setIsEditing] = useState(false);
   const [overlayIsVisible, setOverlayIsVisible] = useState(false);
-
+  const [thisNoteIsDragged, setThisNoteIsDragged] = useState(false);
   const noteRef = useRef(null);
   const overlayRef = useRef(null);
+
+  const queryClient = useQueryClient();
+
+  const { mutate: updateNote } = useMutation(
+    (note) => {
+      return updateNoteRequest(note);
+    },
+    {
+      onSettled: (_, err) => {
+        err && console.log(err);
+        queryClient.invalidateQueries("notes");
+      },
+    }
+  );
 
   const handleClickNote = (e) => {
     if (overlayRef && overlayRef.current.contains(e.target)) {
@@ -29,6 +50,37 @@ export const Note = ({ note, popupStorage, setPopupStorage }) => {
     } else {
       setOverlayIsVisible(false);
     }
+  };
+
+  const handleDragStart = (e) => {
+    e.nativeEvent.dataTransfer.setData("text/plain", JSON.stringify(note));
+    setNoteIsDragged(true);
+    setThisNoteIsDragged(true);
+    setOverlayIsVisible(false);
+    e.nativeEvent.dataTransfer.effectAllowed = "move";
+  };
+
+  const handleDragEnd = (e) => {
+    setNoteIsDragged(false);
+    setThisNoteIsDragged(false);
+  };
+
+  const handleDragEnter = (e) => {
+    e.preventDefault();
+  };
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    const draggedNote = JSON.parse(
+      e.nativeEvent.dataTransfer.getData("text/plain")
+    );
+    // Swap positions of notes
+    updateNote({ ...draggedNote, position: note.position });
+    updateNote({ ...note, position: draggedNote.position });
   };
 
   useEffect(() => {
@@ -48,9 +100,18 @@ export const Note = ({ note, popupStorage, setPopupStorage }) => {
     <>
       <div
         onClick={handleClickNote}
-        className={styles.note}
+        className={`${styles.note} ${
+          noteIsDragged && thisNoteIsDragged === false && styles.noteDropZone
+        }`}
         key={note._id}
         ref={noteRef}
+        data-position={note.position}
+        draggable="true"
+        onDragStart={handleDragStart}
+        onDragEnd={handleDragEnd}
+        onDragEnter={handleDragEnter}
+        onDragOver={handleDragOver}
+        onDrop={handleDrop}
       >
         <div className={styles.noteTitle}>
           {note.title.length > 150

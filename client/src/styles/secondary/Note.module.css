@@ -48,3 +48,10 @@
 .hidden {
   opacity: 0;
 }
+
+.noteDropZone {
+  /* box-sizing: border-box; */
+  outline: 3px solid black;
+  outline-style: dashed;
+  border-color: white;
+}

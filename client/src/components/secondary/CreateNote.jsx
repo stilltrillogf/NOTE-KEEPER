@@ -4,9 +4,10 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import styles from "../../styles/secondary/CreateNote.module.css";
 import { createNoteRequest } from "../../API/createNoteRequest";
 
-export const CreateNote = () => {
+export const CreateNote = ({ notes }) => {
   const [note, setNote] = useState(initialNote);
   const [isTakingANote, setIsTakingANote] = useState(false);
+  const [timeoutIsActive, setTimeoutIsActive] = useState(false);
   const wrapperRef = useRef(null);
 
   const queryClient = useQueryClient();
@@ -23,12 +24,22 @@ export const CreateNote = () => {
     }
   );
 
+  const handleTakeANote = () => {
+    if (isTakingANote) return;
+    if (timeoutIsActive) return; // TODO: popup with info that user must wait
+    setIsTakingANote(true);
+  };
+
   const handleFinishTakingANote = () => {
     if (note.text === "" && note.title === "") setIsTakingANote(false);
     else {
       createNote(note);
       setNote(initialNote);
       setIsTakingANote(false);
+      setTimeoutIsActive(true);
+      setTimeout(() => {
+        setTimeoutIsActive(false);
+      }, 2500);
     }
   };
 
@@ -51,13 +62,11 @@ export const CreateNote = () => {
     <div
       className={isTakingANote ? styles.wrapperActive : styles.wrapper}
       ref={wrapperRef}
-      onClick={() => {
-        if (isTakingANote) return;
-        setIsTakingANote(true);
-      }}
+      onClick={handleTakeANote}
     >
       {isTakingANote ? (
         <CreateNoteActive
+          notes={notes}
           note={note}
           setNote={setNote}
           handleFinishTakingANote={handleFinishTakingANote}
@@ -72,16 +81,30 @@ export const CreateNote = () => {
   );
 };
 
-const initialNote = {
-  title: "",
-  text: "",
-};
-
-const CreateNoteActive = ({ note, setNote, handleFinishTakingANote }) => {
+const CreateNoteActive = ({
+  notes,
+  note,
+  setNote,
+  handleFinishTakingANote,
+}) => {
   const textInputRef = useRef(null);
 
   useEffect(() => {
     textInputRef.current.focus();
+  }, []);
+
+  useEffect(() => {
+    if (notes.length === 0) {
+      setNote({
+        ...note,
+        position: 1,
+      });
+    } else {
+      setNote({
+        ...note,
+        position: notes.at(-1).position + 1,
+      });
+    }
   }, []);
 
   return (
@@ -115,4 +138,9 @@ const CreateNoteActive = ({ note, setNote, handleFinishTakingANote }) => {
       </div>
     </div>
   );
+};
+
+const initialNote = {
+  title: "",
+  text: "",
 };

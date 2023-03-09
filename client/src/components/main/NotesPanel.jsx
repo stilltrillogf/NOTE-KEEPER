@@ -22,7 +22,7 @@ export const NotesPanel = () => {
   }
   return (
     <div className={styles.notesPanel}>
-      <CreateNote />
+      <CreateNote notes={notes} />
       {isLoading ? <ClipLoader /> : <Notes notes={notes} />}
     </div>
   );

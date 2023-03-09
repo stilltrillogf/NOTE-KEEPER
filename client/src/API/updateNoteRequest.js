@@ -9,6 +9,7 @@ export const updateNoteRequest = (note) => {
     body: JSON.stringify({
       title: note.title,
       text: note.text,
+      position: note.position,
     }),
   }).then((res) => res.json());
 };

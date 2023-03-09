@@ -4,18 +4,23 @@ import { Note } from "./Note";
 import styles from "../../styles/secondary/Notes.module.css";
 
 export const Notes = ({ notes }) => {
+  const [sortedNotes, setSortedNotes] = useState(
+    notes.sort((a, b) => {
+      return a.position - b.position;
+    })
+  );
   const [popupStorage, setPopupStorage] = useState(null);
-
   const [columnsNumber, setColumnsNumber] = useState(
     Math.floor(window.innerWidth / 250)
   );
   const [columns, setColumns] = useState(
-    splitNotesBetweenColumns(notes, columnsNumber)
+    splitNotesBetweenColumns(sortedNotes, columnsNumber)
   );
+  const [noteIsDragged, setNoteIsDragged] = useState(false);
 
   const handleGridWidthChange = () => {
     setColumnsNumber(Math.floor(window.innerWidth / 250));
-    setColumns(splitNotesBetweenColumns(notes, columnsNumber));
+    setColumns(splitNotesBetweenColumns(sortedNotes, columnsNumber));
   };
 
   useEffect(() => {
@@ -31,17 +36,20 @@ export const Notes = ({ notes }) => {
   }, [handleGridWidthChange]);
 
   useEffect(() => {
-    setColumns(splitNotesBetweenColumns(notes, columnsNumber));
-  }, [notes, columnsNumber]);
+    setColumns(splitNotesBetweenColumns(sortedNotes, columnsNumber));
+  }, [sortedNotes, columnsNumber]);
 
-  /*
-when the note is deleted, columns doesn't update indexes so one note becomes undefined 
-*/
+  useEffect(() => {
+    setSortedNotes(
+      notes.sort((a, b) => {
+        return a.position - b.position;
+      })
+    );
+  }, [notes]);
 
-  console.log(columns);
   return (
     <div className={styles.notesGrid}>
-      {columns.map((colNotes, index) => {
+      {columns.map((columnNotes, index) => {
         return (
           <Masonry
             key={index}
@@ -49,15 +57,16 @@ when the note is deleted, columns doesn't update indexes so one note becomes und
             className={styles.masonryNotesGrid}
             columnClassName={styles.masonryNotesGridColumn}
           >
-            {colNotes.map((notesIndex, index) => {
-              if (!notes[notesIndex]) return;
-
+            {columnNotes.map((note) => {
+              if (!note) return;
               return (
                 <Note
-                  key={index}
+                  noteIsDragged={noteIsDragged}
+                  setNoteIsDragged={setNoteIsDragged}
+                  key={note._id}
                   popupStorage={popupStorage}
                   setPopupStorage={setPopupStorage}
-                  note={notes[notesIndex]}
+                  note={note}
                 />
               );
             })}
@@ -69,13 +78,13 @@ when the note is deleted, columns doesn't update indexes so one note becomes und
 };
 
 function splitNotesBetweenColumns(notes, columnsNumber) {
-  const containers = Array.from({ length: columnsNumber }, () => []);
+  const columns = Array.from({ length: columnsNumber }, () => []);
   let currentIndex = 0;
 
-  notes.forEach((_, i) => {
-    containers[currentIndex].push(i);
+  notes.forEach((note) => {
+    columns[currentIndex].push(note);
     currentIndex = (currentIndex + 1) % columnsNumber;
   });
 
-  return containers;
+  return columns;
 }

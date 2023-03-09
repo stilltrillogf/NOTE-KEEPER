@@ -7,6 +7,9 @@ const NoteSchema = new mongoose.Schema({
   text: {
     type: String,
   },
+  position: {
+    type: Number,
+  },
 });
 
 const NoteModel = mongoose.model("Note", NoteSchema);
