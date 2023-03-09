@@ -8,12 +8,27 @@ import { NoteEditModal } from "./NoteEditModal";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { deleteNoteRequest } from "../../API/deleteNoteRequest";
 import { ConfirmationPopup } from "../utility/ConfirmationPopup";
+import { updateNoteRequest } from "../../API/updateNoteRequest";
 
 export const Note = ({ note, popupStorage, setPopupStorage }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [overlayIsVisible, setOverlayIsVisible] = useState(false);
   const noteRef = useRef(null);
   const overlayRef = useRef(null);
+
+  const queryClient = useQueryClient();
+
+  const { mutate: updateNote } = useMutation(
+    (note) => {
+      return updateNoteRequest(note);
+    },
+    {
+      onSettled: (_, err) => {
+        err && console.log(err);
+        queryClient.invalidateQueries("notes");
+      },
+    }
+  );
 
   const handleClickNote = (e) => {
     if (overlayRef && overlayRef.current.contains(e.target)) {
@@ -31,7 +46,7 @@ export const Note = ({ note, popupStorage, setPopupStorage }) => {
   };
 
   const handleDragStart = (e) => {
-    console.log(note.position);
+    e.nativeEvent.dataTransfer.setData("text/plain", JSON.stringify(note));
   };
 
   const handleDragEnter = (e) => {
@@ -43,7 +58,13 @@ export const Note = ({ note, popupStorage, setPopupStorage }) => {
   };
 
   const handleDrop = (e) => {
-    console.log(`dropped at note ${note.position}`);
+    e.preventDefault();
+    const draggedNote = JSON.parse(
+      e.nativeEvent.dataTransfer.getData("text/plain")
+    );
+    // Swap positions of notes
+    updateNote({ ...draggedNote, position: note.position });
+    updateNote({ ...note, position: draggedNote.position });
   };
 
   useEffect(() => {
@@ -66,6 +87,7 @@ export const Note = ({ note, popupStorage, setPopupStorage }) => {
         className={styles.note}
         key={note._id}
         ref={noteRef}
+        data-position={note.position}
         draggable="true"
         onDragStart={handleDragStart}
         onDragEnter={handleDragEnter}

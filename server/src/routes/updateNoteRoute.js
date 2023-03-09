@@ -5,6 +5,7 @@ module.exports = async (req, res) => {
   const note = await NoteModel.findById(id);
   note.title = req.body.title;
   note.text = req.body.text;
+  note.position = req.body.position;
   await note.save();
   res.json(note);
 };
