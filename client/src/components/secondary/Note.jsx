@@ -38,14 +38,14 @@ export const Note = ({
   );
 
   const handleClickNote = (e) => {
-    if (overlayRef && overlayRef.current.contains(e.target)) {
+    if (overlayRef.current && overlayRef.current.contains(e.target)) {
       return;
     }
     setIsEditing(true);
   };
 
   const handleHoverNote = (e) => {
-    if (noteRef && noteRef.current.contains(e.target)) {
+    if (noteRef.current && noteRef.current.contains(e.target)) {
       setOverlayIsVisible(true);
     } else {
       setOverlayIsVisible(false);
