@@ -28,7 +28,7 @@ export const Notes = ({ notes }) => {
   const [pinnedColumns, setPinnedColumns] = useState(
     splitNotesBetweenColumns(pinnedNotes, columnsNumber)
   );
-  const [noteIsDragged, setNoteIsDragged] = useState(false);
+  const [draggedNote, setDraggedNote] = useState(null);
 
   const handleGridWidthChange = () => {
     setColumnsNumber(Math.floor(window.innerWidth / 250));
@@ -85,11 +85,10 @@ export const Notes = ({ notes }) => {
             >
               {columnNotes.map((note) => {
                 if (!note) return;
-                console.log(note);
                 return (
                   <Note
-                    noteIsDragged={noteIsDragged}
-                    setNoteIsDragged={setNoteIsDragged}
+                    draggedNote={draggedNote}
+                    setDraggedNote={setDraggedNote}
                     key={note._id}
                     popupStorage={popupStorage}
                     setPopupStorage={setPopupStorage}
@@ -114,8 +113,8 @@ export const Notes = ({ notes }) => {
                 if (!note) return;
                 return (
                   <Note
-                    noteIsDragged={noteIsDragged}
-                    setNoteIsDragged={setNoteIsDragged}
+                    draggedNote={draggedNote}
+                    setDraggedNote={setDraggedNote}
                     key={note._id}
                     popupStorage={popupStorage}
                     setPopupStorage={setPopupStorage}

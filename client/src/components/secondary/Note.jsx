@@ -11,8 +11,8 @@ import { ConfirmationPopup } from "../utility/ConfirmationPopup";
 import { updateNoteRequest } from "../../API/updateNoteRequest";
 
 export const Note = ({
-  noteIsDragged,
-  setNoteIsDragged,
+  draggedNote,
+  setDraggedNote,
   note,
   popupStorage,
   setPopupStorage,
@@ -20,6 +20,9 @@ export const Note = ({
   const [isEditing, setIsEditing] = useState(false);
   const [overlayIsVisible, setOverlayIsVisible] = useState(false);
   const [thisNoteIsDragged, setThisNoteIsDragged] = useState(false);
+  const [dynamicDropZoneClass, setDynamicDropZoneClass] = useState(
+    calculateDynamicDropZoneClass(draggedNote, note, thisNoteIsDragged)
+  );
   const noteRef = useRef(null);
   const overlayRef = useRef(null);
 
@@ -54,14 +57,17 @@ export const Note = ({
 
   const handleDragStart = (e) => {
     e.nativeEvent.dataTransfer.setData("text/plain", JSON.stringify(note));
-    setNoteIsDragged(true);
+    setDraggedNote(note);
     setThisNoteIsDragged(true);
+    setDynamicDropZoneClass(
+      calculateDynamicDropZoneClass(draggedNote, note, thisNoteIsDragged)
+    );
     setOverlayIsVisible(false);
     e.nativeEvent.dataTransfer.effectAllowed = "move";
   };
 
   const handleDragEnd = (e) => {
-    setNoteIsDragged(false);
+    setDraggedNote(null);
     setThisNoteIsDragged(false);
   };
 
@@ -96,13 +102,17 @@ export const Note = ({
     !isEditing && (document.body.style.overflow = "");
   }, [isEditing]);
 
+  useEffect(() => {
+    setDynamicDropZoneClass(
+      calculateDynamicDropZoneClass(draggedNote, note, thisNoteIsDragged)
+    );
+  }, [draggedNote, note, thisNoteIsDragged]);
+
   return (
     <>
       <div
         onClick={handleClickNote}
-        className={`${styles.note} ${
-          noteIsDragged && thisNoteIsDragged === false && styles.noteDropZone
-        }`}
+        className={`${styles.note} ${dynamicDropZoneClass}`}
         key={note._id}
         ref={noteRef}
         draggable="true"
@@ -138,6 +148,27 @@ export const Note = ({
       )}
     </>
   );
+};
+
+const calculateDynamicDropZoneClass = (
+  draggedNote,
+  note,
+  thisNoteIsDragged
+) => {
+  if (
+    thisNoteIsDragged === false &&
+    draggedNote?.isPinned === true &&
+    note.isPinned === true
+  ) {
+    return styles.noteDropZone;
+  }
+  if (
+    thisNoteIsDragged === false &&
+    draggedNote?.isPinned === false &&
+    note.isPinned === false
+  ) {
+    return styles.noteDropZone;
+  }
 };
 
 const NoteOverlay = forwardRef(
