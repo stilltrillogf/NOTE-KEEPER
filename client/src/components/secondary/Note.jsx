@@ -72,11 +72,21 @@ export const Note = ({
   };
 
   const handleDragEnter = (e) => {
-    e.preventDefault();
+    if (draggedNote.isPinned === true && note.isPinned === true) {
+      e.preventDefault();
+    }
+    if (draggedNote.isPinned === false && note.isPinned === false) {
+      e.preventDefault();
+    }
   };
 
   const handleDragOver = (e) => {
-    e.preventDefault();
+    if (draggedNote.isPinned === true && note.isPinned === true) {
+      e.preventDefault();
+    }
+    if (draggedNote.isPinned === false && note.isPinned === false) {
+      e.preventDefault();
+    }
   };
 
   const handleDrop = (e) => {
@@ -84,7 +94,6 @@ export const Note = ({
     const draggedNote = JSON.parse(
       e.nativeEvent.dataTransfer.getData("text/plain")
     );
-    // Swap positions of notes
     updateNote({ ...draggedNote, position: note.position });
     updateNote({ ...note, position: draggedNote.position });
   };
