@@ -15,11 +15,6 @@ export const NotesPanel = () => {
     error,
   } = useQuery(["notes"], readNotesRequest);
 
-  if (isError) {
-    return (
-      <div style={{ color: "red" }}>Following error occurred: {error}</div>
-    );
-  }
   return (
     <div className={styles.notesPanel}>
       <CreateNote notes={notes} />

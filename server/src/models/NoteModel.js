@@ -10,8 +10,11 @@ const NoteSchema = new mongoose.Schema({
   position: {
     type: Number,
   },
+  isPinned: {
+    type: Boolean,
+  },
 });
 
-const NoteModel = mongoose.model("Note", NoteSchema);
+const NoteModel = mongoose.model("notes", NoteSchema);
 
 module.exports = NoteModel;

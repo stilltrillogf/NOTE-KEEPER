@@ -6,6 +6,7 @@ module.exports = async (req, res) => {
   note.title = req.body.title;
   note.text = req.body.text;
   note.position = req.body.position;
+  note.isPinned = req.body.isPinned;
   await note.save();
   res.json(note);
 };

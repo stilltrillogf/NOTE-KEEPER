@@ -1,6 +1,7 @@
 import { API_URL } from "./config";
 
 export const createNoteRequest = (note) => {
+  console.log(note);
   return fetch(`${API_URL}/notes`, {
     method: "POST",
     headers: {
@@ -10,6 +11,7 @@ export const createNoteRequest = (note) => {
       title: note.title,
       text: note.text,
       position: note.position,
+      isPinned: note.isPinned,
     }),
   }).then((res) => res.json());
 };

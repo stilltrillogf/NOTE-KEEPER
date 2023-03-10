@@ -105,7 +105,6 @@ export const Note = ({
         }`}
         key={note._id}
         ref={noteRef}
-        data-position={note.position}
         draggable="true"
         onDragStart={handleDragStart}
         onDragEnd={handleDragEnd}
@@ -159,9 +158,26 @@ const NoteOverlay = forwardRef(
       }
     );
 
+    const { mutate: updateNote } = useMutation(
+      (note) => {
+        return updateNoteRequest(note);
+      },
+      {
+        onSettled: (_, err) => {
+          err && console.log(err);
+          queryClient.invalidateQueries("notes");
+        },
+      }
+    );
+
     const handleDeleteNote = () => {
       popupStorage === null && setPopupIsVisible(true);
       popupStorage === true && deleteNote(note);
+    };
+
+    const handlePinUnpinNote = () => {
+      updateNote({ ...note, isPinned: !note.isPinned });
+      console.log(note);
     };
 
     return (
@@ -178,6 +194,7 @@ const NoteOverlay = forwardRef(
               overlayIsVisible ? "" : styles.hidden
             }`}
             size={25}
+            onClick={handlePinUnpinNote}
           />
           <div
             className={`${styles.optionsFooter} ${
