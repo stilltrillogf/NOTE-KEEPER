@@ -10,6 +10,7 @@ export const updateNoteRequest = (note) => {
       title: note.title,
       text: note.text,
       position: note.position,
+      isPinned: note.isPinned,
     }),
   }).then((res) => res.json());
 };

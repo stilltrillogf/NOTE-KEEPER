@@ -11,8 +11,8 @@ import { ConfirmationPopup } from "../utility/ConfirmationPopup";
 import { updateNoteRequest } from "../../API/updateNoteRequest";
 
 export const Note = ({
-  noteIsDragged,
-  setNoteIsDragged,
+  draggedNote,
+  setDraggedNote,
   note,
   popupStorage,
   setPopupStorage,
@@ -20,6 +20,9 @@ export const Note = ({
   const [isEditing, setIsEditing] = useState(false);
   const [overlayIsVisible, setOverlayIsVisible] = useState(false);
   const [thisNoteIsDragged, setThisNoteIsDragged] = useState(false);
+  const [dynamicDropZoneClass, setDynamicDropZoneClass] = useState(
+    calculateDynamicDropZoneClass(draggedNote, note, thisNoteIsDragged)
+  );
   const noteRef = useRef(null);
   const overlayRef = useRef(null);
 
@@ -54,23 +57,36 @@ export const Note = ({
 
   const handleDragStart = (e) => {
     e.nativeEvent.dataTransfer.setData("text/plain", JSON.stringify(note));
-    setNoteIsDragged(true);
+    setDraggedNote(note);
     setThisNoteIsDragged(true);
+    setDynamicDropZoneClass(
+      calculateDynamicDropZoneClass(draggedNote, note, thisNoteIsDragged)
+    );
     setOverlayIsVisible(false);
     e.nativeEvent.dataTransfer.effectAllowed = "move";
   };
 
   const handleDragEnd = (e) => {
-    setNoteIsDragged(false);
+    setDraggedNote(null);
     setThisNoteIsDragged(false);
   };
 
   const handleDragEnter = (e) => {
-    e.preventDefault();
+    if (draggedNote.isPinned === true && note.isPinned === true) {
+      e.preventDefault();
+    }
+    if (draggedNote.isPinned === false && note.isPinned === false) {
+      e.preventDefault();
+    }
   };
 
   const handleDragOver = (e) => {
-    e.preventDefault();
+    if (draggedNote.isPinned === true && note.isPinned === true) {
+      e.preventDefault();
+    }
+    if (draggedNote.isPinned === false && note.isPinned === false) {
+      e.preventDefault();
+    }
   };
 
   const handleDrop = (e) => {
@@ -78,7 +94,6 @@ export const Note = ({
     const draggedNote = JSON.parse(
       e.nativeEvent.dataTransfer.getData("text/plain")
     );
-    // Swap positions of notes
     updateNote({ ...draggedNote, position: note.position });
     updateNote({ ...note, position: draggedNote.position });
   };
@@ -96,16 +111,19 @@ export const Note = ({
     !isEditing && (document.body.style.overflow = "");
   }, [isEditing]);
 
+  useEffect(() => {
+    setDynamicDropZoneClass(
+      calculateDynamicDropZoneClass(draggedNote, note, thisNoteIsDragged)
+    );
+  }, [draggedNote, note, thisNoteIsDragged]);
+
   return (
     <>
       <div
         onClick={handleClickNote}
-        className={`${styles.note} ${
-          noteIsDragged && thisNoteIsDragged === false && styles.noteDropZone
-        }`}
+        className={`${styles.note} ${dynamicDropZoneClass}`}
         key={note._id}
         ref={noteRef}
-        data-position={note.position}
         draggable="true"
         onDragStart={handleDragStart}
         onDragEnd={handleDragEnd}
@@ -141,6 +159,27 @@ export const Note = ({
   );
 };
 
+const calculateDynamicDropZoneClass = (
+  draggedNote,
+  note,
+  thisNoteIsDragged
+) => {
+  if (
+    thisNoteIsDragged === false &&
+    draggedNote?.isPinned === true &&
+    note.isPinned === true
+  ) {
+    return styles.noteDropZone;
+  }
+  if (
+    thisNoteIsDragged === false &&
+    draggedNote?.isPinned === false &&
+    note.isPinned === false
+  ) {
+    return styles.noteDropZone;
+  }
+};
+
 const NoteOverlay = forwardRef(
   ({ note, overlayIsVisible, popupStorage, setPopupStorage }, ref) => {
     const [popupIsVisible, setPopupIsVisible] = useState(false);
@@ -159,9 +198,26 @@ const NoteOverlay = forwardRef(
       }
     );
 
+    const { mutate: updateNote } = useMutation(
+      (note) => {
+        return updateNoteRequest(note);
+      },
+      {
+        onSettled: (_, err) => {
+          err && console.log(err);
+          queryClient.invalidateQueries("notes");
+        },
+      }
+    );
+
     const handleDeleteNote = () => {
       popupStorage === null && setPopupIsVisible(true);
       popupStorage === true && deleteNote(note);
+    };
+
+    const handlePinUnpinNote = () => {
+      updateNote({ ...note, isPinned: !note.isPinned });
+      console.log(note);
     };
 
     return (
@@ -178,6 +234,7 @@ const NoteOverlay = forwardRef(
               overlayIsVisible ? "" : styles.hidden
             }`}
             size={25}
+            onClick={handlePinUnpinNote}
           />
           <div
             className={`${styles.optionsFooter} ${

@@ -143,4 +143,5 @@ const CreateNoteActive = ({
 const initialNote = {
   title: "",
   text: "",
+  isPinned: false,
 };
